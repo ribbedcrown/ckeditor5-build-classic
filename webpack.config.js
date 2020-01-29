@@ -22,17 +22,24 @@ const postcssConfig = styles.getPostCssConfig( {
 } );
 
 const customProps = require( 'postcss-custom-properties' )( {
-	// importFrom: [
-	// 	'node_modules/@ckeditor/ckeditor5-ui/theme/globals/_zindex.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_colors.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_disabled.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_focus.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_fonts.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_reset.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_rounded.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_shadow.css',
-	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_spacing.css',
-	// ],
+	importFrom: [
+		'node_modules/@ckeditor/ckeditor5-ui/theme/globals/_zindex.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_colors.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_disabled.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_focus.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_fonts.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_reset.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_rounded.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_shadow.css',
+		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_spacing.css',
+		{
+			customProperties: {
+				'--ck-input-text-width': '18em',
+				'--ck-line-height-base': '1.84615',
+				'--ck-icon-size': 'calc(var(--ck-line-height-base) * var(--ck-font-size-normal))'
+			}
+		},
+	],
 	preserve: false,
 } );
 
@@ -79,7 +86,7 @@ module.exports = {
 			additionalLanguages: 'all'
 		} ),
 		new MiniCssExtractPlugin( {
-			filename: 'ckeditor.css',
+			filename: 'styles.css',
 		} ),
 		new webpack.BannerPlugin( {
 			banner: bundler.getLicenseBanner(),
@@ -96,20 +103,14 @@ module.exports = {
 			{
 				test: /\.css$/,
 				use: [
-					// MiniCssExtractPlugin.loader,
+					MiniCssExtractPlugin.loader,
+					'css-loader',
 					// {
-					// 	loader: 'css-loader',
+					// 	loader: 'style-loader',
 					// 	options: {
-					// 		sourceMap: true,
-					// 		importLoaders: 1,
+					// 		injectType: 'singletonStyleTag'
 					// 	}
 					// },
-					{
-						loader: 'style-loader',
-						options: {
-							injectType: 'singletonStyleTag'
-						}
-					},
 					{
 						loader: 'postcss-loader',
 						options: postcssConfig
