@@ -11,7 +11,36 @@ const path = require( 'path' );
 const webpack = require( 'webpack' );
 const { bundler, styles } = require( '@ckeditor/ckeditor5-dev-utils' );
 const CKEditorWebpackPlugin = require( '@ckeditor/ckeditor5-dev-webpack-plugin' );
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const TerserPlugin = require( 'terser-webpack-plugin' );
+
+const postcssConfig = styles.getPostCssConfig( {
+	themeImporter: {
+		themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+	},
+	minify: true
+} );
+
+// const customProps = require( 'postcss-custom-properties' )( {
+// 	importFrom: [
+// 		'node_modules/@ckeditor/ckeditor5-ui/theme/globals/_zindex.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_colors.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_disabled.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_focus.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_fonts.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_reset.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_rounded.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_shadow.css',
+// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_spacing.css',
+// 	],
+// 	preserve: false,
+// } );
+//
+// const postcssPlugins = [ ...postcssConfig.plugins.slice( 0, 3 ), customProps, ...postcssConfig.plugins.slice( 3 ) ];
+//
+// postcssConfig.plugins = postcssPlugins;
+//
+// console.log(postcssConfig);
 
 module.exports = {
 	devtool: 'source-map',
@@ -51,6 +80,9 @@ module.exports = {
 			language: 'ru',
 			additionalLanguages: 'all'
 		} ),
+		new MiniCssExtractPlugin( {
+			filename: 'ckeditor.css',
+		} ),
 		new webpack.BannerPlugin( {
 			banner: bundler.getLicenseBanner(),
 			raw: true
@@ -66,20 +98,23 @@ module.exports = {
 			{
 				test: /\.css$/,
 				use: [
+					MiniCssExtractPlugin.loader,
 					{
-						loader: 'style-loader',
+						loader: 'css-loader',
 						options: {
-							injectType: 'singletonStyleTag'
+							sourceMap: true,
+							importLoaders: 1,
 						}
 					},
+					// {
+					// 	loader: 'style-loader',
+					// 	options: {
+					// 		injectType: 'singletonStyleTag'
+					// 	}
+					// },
 					{
 						loader: 'postcss-loader',
-						options: styles.getPostCssConfig( {
-							themeImporter: {
-								themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
-							},
-							minify: true
-						} )
+						options: postcssConfig
 					},
 				]
 			}
