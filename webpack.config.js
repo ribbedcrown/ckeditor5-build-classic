@@ -21,26 +21,24 @@ const postcssConfig = styles.getPostCssConfig( {
 	minify: true
 } );
 
-// const customProps = require( 'postcss-custom-properties' )( {
-// 	importFrom: [
-// 		'node_modules/@ckeditor/ckeditor5-ui/theme/globals/_zindex.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_colors.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_disabled.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_focus.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_fonts.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_reset.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_rounded.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_shadow.css',
-// 		'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_spacing.css',
-// 	],
-// 	preserve: false,
-// } );
-//
-// const postcssPlugins = [ ...postcssConfig.plugins.slice( 0, 3 ), customProps, ...postcssConfig.plugins.slice( 3 ) ];
-//
-// postcssConfig.plugins = postcssPlugins;
-//
-// console.log(postcssConfig);
+const customProps = require( 'postcss-custom-properties' )( {
+	// importFrom: [
+	// 	'node_modules/@ckeditor/ckeditor5-ui/theme/globals/_zindex.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_colors.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_disabled.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_focus.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_fonts.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_reset.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_rounded.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_shadow.css',
+	// 	'node_modules/@ckeditor/ckeditor5-theme-lark/theme/ckeditor5-ui/globals/_spacing.css',
+	// ],
+	preserve: false,
+} );
+
+const postcssPlugins = [ ...postcssConfig.plugins.slice( 0, 3 ), customProps, ...postcssConfig.plugins.slice( 3 ) ];
+
+postcssConfig.plugins = postcssPlugins;
 
 module.exports = {
 	devtool: 'source-map',
@@ -98,20 +96,20 @@ module.exports = {
 			{
 				test: /\.css$/,
 				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-						options: {
-							sourceMap: true,
-							importLoaders: 1,
-						}
-					},
+					// MiniCssExtractPlugin.loader,
 					// {
-					// 	loader: 'style-loader',
+					// 	loader: 'css-loader',
 					// 	options: {
-					// 		injectType: 'singletonStyleTag'
+					// 		sourceMap: true,
+					// 		importLoaders: 1,
 					// 	}
 					// },
+					{
+						loader: 'style-loader',
+						options: {
+							injectType: 'singletonStyleTag'
+						}
+					},
 					{
 						loader: 'postcss-loader',
 						options: postcssConfig
