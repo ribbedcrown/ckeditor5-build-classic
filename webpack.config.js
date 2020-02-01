@@ -51,7 +51,10 @@ module.exports = {
 	devtool: 'source-map',
 	performance: { hints: false },
 
-	entry: path.resolve( __dirname, 'src', 'ckeditor.js' ),
+	entry: [
+		require.resolve( 'regenerator-runtime/runtime.js' ),
+		path.resolve( __dirname, 'src', 'ckeditor.js' ),
+	],
 
 	output: {
 		// The name under which the editor will be exported.
@@ -101,16 +104,21 @@ module.exports = {
 				use: [ 'raw-loader' ]
 			},
 			{
+				test: /ckeditor5-[^/\\]+[/\\].+\.js$/,
+				use: [
+					{
+						loader: 'babel-loader',
+						options: {
+							presets: [ require( '@babel/preset-env' ) ]
+						}
+					}
+				]
+			},
+			{
 				test: /\.css$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					'css-loader',
-					// {
-					// 	loader: 'style-loader',
-					// 	options: {
-					// 		injectType: 'singletonStyleTag'
-					// 	}
-					// },
 					{
 						loader: 'postcss-loader',
 						options: postcssConfig
